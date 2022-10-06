@@ -4,81 +4,53 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 
-export default function SignUpPage() {
-  const [name, setName] = useState('');
+export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
 
-  function signUp(event) {
+  function signIn(event) {
     event.preventDefault();
 
     setIsDisabled(true);
 
     const body = {
-      name,
       email,
       password,
-      confirmPassword,
     };
 
-    const promise = axios.post('http://localhost:4000/signup', body);
+    const promise = axios.post('http://localhost:4000/login', body);
 
-    promise.then(() => {
+    promise.then((response) => {
+      const token = response.data;
+      localStorage.setItem('token', token);
       Swal.fire({
-        position: 'center',
+        position: 'top',
         icon: 'success',
-        title: 'Prontinho! Cadastrado com sucesso!',
+        title: 'Login feito com sucesso!',
         showConfirmButton: false,
-        timer: 2000,
+        timer: 1500,
       });
-      navigate('/');
+      navigate('/home');
     });
 
-    promise.catch((error) => {
+    promise.catch(() => {
       setIsDisabled(false);
-      if (error.response.status === 400) {
-        Swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: 'As senhas não são iguais!',
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      } else if (error.response.status === 409) {
-        Swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: 'Este email já está sendo usado!',
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      } else if (error.response.status === 422) {
-        Swal.fire({
-          position: 'center',
-          icon: 'error',
-          title: 'Confira os dados e tente novamente!',
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      }
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Confira os dados e tente novamente!',
+        showConfirmButton: false,
+        timer: 1800,
+      });
     });
   }
 
   return (
     <Container>
       <h1>Livro de Receitas</h1>
-      <form onSubmit={signUp}>
-        <input
-          required
-          type="text"
-          disabled={isDisabled}
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+      <form onSubmit={signIn}>
         <input
           required
           type="text"
@@ -95,18 +67,10 @@ export default function SignUpPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <input
-          required
-          type="password"
-          disabled={isDisabled}
-          placeholder="Confirme a senha"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Login</button>
       </form>
-      <Link to="/" style={{ textDecoration: 'none' }}>
-        <Login>Já tem uma conta? Faça login!</Login>
+      <Link to="/signup" style={{ textDecoration: 'none' }}>
+        <SignUp>Primeira vez aqui? Cadastre-se!</SignUp>
       </Link>
     </Container>
   );
@@ -183,7 +147,7 @@ const Container = styled.div`
   }
 `;
 
-const Login = styled.div`
+const SignUp = styled.div`
   font-family: 'Patrick Hand';
   font-weight: 400;
   font-size: 22px;
