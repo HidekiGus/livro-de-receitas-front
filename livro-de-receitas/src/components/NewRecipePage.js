@@ -192,28 +192,25 @@ export default function NewRecipePage() {
   );
 }
 
-const Line = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: black;
-`;
-
 const Title = styled.h1`
   font-size: 40px;
 
   padding: 4vh 8vw;
+
+  @media (min-width: 600px) {
+    padding-left: 25vw;
+  }
 `;
 
 const NewRecipeContainer = styled.div`
-  width: 100vw;
-  height: fit-content;
-
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
-
   margin-bottom: 10vh; //8vh from Footer + 2vh for spacing between last post and footer
+
+  width: 100vw;
+  height: fit-content;
 `;
 
 const TitleContainer = styled.div`
@@ -232,6 +229,10 @@ const TitleContainer = styled.div`
     color: grey;
     padding-bottom: 10px;
   }
+
+  @media (min-width: 600px) {
+    width: 500px;
+  }
 `;
 
 const Input = styled.input`
@@ -243,6 +244,10 @@ const Input = styled.input`
   box-shadow: 0px 2px 4px gray;
   ::placeholder {
     color: gray;
+  }
+
+  @media (min-width: 600px) {
+    width: 500px;
   }
 `;
 
@@ -262,6 +267,10 @@ const TimeContainer = styled.div`
     color: grey;
     padding-bottom: 10px;
   }
+
+  @media (min-width: 600px) {
+    width: 500px;
+  }
 `;
 
 const PortionsContainer = styled.div`
@@ -279,6 +288,10 @@ const PortionsContainer = styled.div`
     font-size: 20px;
     color: grey;
     padding-bottom: 10px;
+  }
+
+  @media (min-width: 600px) {
+    width: 500px;
   }
 `;
 
@@ -298,6 +311,10 @@ const ImageContainer = styled.div`
     color: grey;
     padding-bottom: 10px;
   }
+
+  @media (min-width: 600px) {
+    width: 500px;
+  }
 `;
 
 const IngredientsContainer = styled.div`
@@ -315,6 +332,10 @@ const IngredientsContainer = styled.div`
     font-size: 20px;
     color: grey;
     padding-bottom: 10px;
+  }
+
+  @media (min-width: 600px) {
+    width: 500px;
   }
 `;
 
@@ -334,6 +355,10 @@ const MethodContainer = styled.div`
     color: grey;
     padding-bottom: 10px;
   }
+
+  @media (min-width: 600px) {
+    width: 500px;
+  }
 `;
 
 const Textarea = styled.textarea`
@@ -347,6 +372,10 @@ const Textarea = styled.textarea`
   ::placeholder {
     color: gray;
   }
+
+  @media (min-width: 600px) {
+    width: 500px;
+  }
 `;
 
 const ButtonsContainer = styled.div`
@@ -359,6 +388,10 @@ const ButtonsContainer = styled.div`
   flex-direction: row;
 
   padding-top: 30px;
+
+  @media (min-width: 600px) {
+    width: 500px;
+  }
 `;
 
 const CancelButton = styled.button`

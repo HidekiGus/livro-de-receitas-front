@@ -166,8 +166,8 @@ const Top = styled.div`
   justify-content: space-around;
 
   img {
-    max-height: 100px;
-    max-width: 160px;
+    height: 100px;
+    width: 160px;
     border: 1px solid black;
     border-radius: 8px;
   }
@@ -175,6 +175,17 @@ const Top = styled.div`
   h1 {
     font-size: 30px;
     width: 150px;
+  }
+
+  @media (min-width: 600px) {
+    h1 {
+      font-size: 40px;
+    }
+
+    img {
+      height: 120px;
+      width: 200px;
+    }
   }
 `;
 
@@ -223,6 +234,24 @@ const BottomMiddle = styled.div`
     font-size: 30px;
     padding-bottom: 5px;
     max-width: 80vw;
+  }
+
+  @media (min-width: 600px) {
+    h1 {
+      padding-bottom: 40px;
+    }
+
+    ol {
+      padding-bottom: 40px;
+    }
+
+    ul {
+      padding-bottom: 40px;
+    }
+
+    li {
+      padding-bottom: 15px;
+    }
   }
 `;
 

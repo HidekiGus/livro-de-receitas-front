@@ -82,6 +82,10 @@ const RecipeContainer = styled.div`
   margin-top: 20px;
   border: 1px solid;
   border-radius: 8px;
+
+  @media (min-width: 600px) {
+    width: 450px;
+  }
 `;
 
 const Top = styled.div`
@@ -93,15 +97,27 @@ const Top = styled.div`
   justify-content: space-around;
 
   img {
-    max-height: 100px;
-    max-width: 160px;
+    height: 100px;
+    width: 160px;
     border: 1px solid black;
     border-radius: 8px;
   }
 
   h1 {
-    font-size: 30px;
+    font-size: 25px;
     width: 150px;
+  }
+  @media (min-width: 600px) {
+    width: 450px;
+
+    img {
+      height: 120px;
+      width: 200px;
+    }
+
+    h1 {
+      font-size: 32px;
+    }
   }
 `;
 
@@ -117,6 +133,10 @@ const Middle = styled.div`
     font-size: 23px;
     padding-bottom: 20px;
   }
+
+  @media (min-width: 600px) {
+    width: 450px;
+  }
 `;
 
 const Bottom = styled.div`
@@ -130,6 +150,10 @@ const Bottom = styled.div`
   img {
     height: 30px;
   }
+
+  @media (min-width: 600px) {
+    width: 450px;
+  }
 `;
 
 const Line = styled.div`
@@ -141,4 +165,8 @@ const Line = styled.div`
 const AboveLine = styled.div`
   width: 90vw;
   height: 190px;
+
+  @media (min-width: 600px) {
+    width: 450px;
+  }
 `;

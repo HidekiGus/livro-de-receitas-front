@@ -45,24 +45,26 @@ export default function LikedPage() {
   return (
     <>
       <Header />
-      {likedRecipes === undefined ? (
-        ''
-      ) : likedRecipes.length === 0 ? (
-        <Message>
-          <img src={heartDislike} />
-          <h1>Você ainda não curtiu nenhuma receita!</h1>
-        </Message>
-      ) : (
-        likedRecipes.map((recipe, index) => (
-          <RecipeCard
-            recipe={recipe}
-            key={index}
-            onClick={() =>
-              window.open(`${frontUrl}/recipes/${recipe.id}`, '_self')
-            }
-          />
-        ))
-      )}
+      <LikedRecipesContainer>
+        {likedRecipes === undefined ? (
+          ''
+        ) : likedRecipes.length === 0 ? (
+          <Message>
+            <img src={heartDislike} />
+            <h1>Você ainda não curtiu nenhuma receita!</h1>
+          </Message>
+        ) : (
+          likedRecipes.map((recipe, index) => (
+            <RecipeCard
+              recipe={recipe}
+              key={index}
+              onClick={() =>
+                window.open(`${frontUrl}/recipes/${recipe.id}`, '_self')
+              }
+            />
+          ))
+        )}
+      </LikedRecipesContainer>
       <Footer />
     </>
   );
@@ -86,4 +88,16 @@ const Message = styled.div`
   img {
     width: 10vh;
   }
+`;
+
+const LikedRecipesContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 10vh; //8vh from Footer + 2vh for spacing between last post and footer
+
+  width: 100vw;
+  height: fit-content;
+  flex-wrap: wrap;
 `;

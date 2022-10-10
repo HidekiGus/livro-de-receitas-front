@@ -67,8 +67,12 @@ export default function HomePage() {
 
 const RecipesContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   margin-bottom: 10vh; //8vh from Footer + 2vh for spacing between last post and footer
+
+  width: 100vw;
+  height: fit-content;
+  flex-wrap: wrap;
 `;
