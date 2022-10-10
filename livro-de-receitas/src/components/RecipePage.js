@@ -232,7 +232,7 @@ const BottomMiddle = styled.div`
 
   li {
     font-size: 30px;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
     max-width: 80vw;
   }
 
