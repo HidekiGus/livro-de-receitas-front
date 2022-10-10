@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import backUrl from '../utils/backUrl';
@@ -15,7 +15,13 @@ export default function HomePage() {
   const [recipes, setRecipes] = useState(null);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(async () => {
+    if (token === null) {
+      navigate('/');
+    }
+
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,

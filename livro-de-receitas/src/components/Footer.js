@@ -15,9 +15,9 @@ export default function Footer() {
       <FooterContainer>
         <Line />
         <Images>
-          <img onClick={navigate('/recipes/new')} src={plus} />
-          <img onClick={navigate('/')} src={house} />
-          <img onClick={navigate('/liked')} src={fullHeart} />
+          <img onClick={() => navigate('/recipes/new')} src={plus} />
+          <img onClick={() => navigate('/home')} src={house} />
+          <img onClick={() => navigate('/liked')} src={fullHeart} />
         </Images>
       </FooterContainer>
     </>

@@ -144,6 +144,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 10vh; //8vh from Footer + 2vh for spacing between last post and footer
 `;
 
 const RecipeContainer = styled.div`
