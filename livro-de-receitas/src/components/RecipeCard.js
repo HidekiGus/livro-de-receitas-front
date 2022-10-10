@@ -6,6 +6,8 @@ import emptyHeart from '../assets/heart-outline.svg';
 import fullHeart from '../assets/heart.svg';
 import link from '../assets/link-outline.svg';
 import Swal from 'sweetalert2';
+import backUrl from '../utils/backUrl.js';
+import frontUrl from '../utils/frontUrl.js';
 
 export default function RecipeCard({ recipe }) {
   const [isLiked, setIsLiked] = useState(recipe.isLiked);
@@ -20,11 +22,7 @@ export default function RecipeCard({ recipe }) {
         Authorization: `Bearer ${token}`,
       },
     };
-    const promise = axios.post(
-      `${process.env.BACK_URL}/like/${recipe.id}`,
-      {},
-      config
-    );
+    const promise = axios.post(`${backUrl}/like/${recipe.id}`, {}, config);
     promise
       .then((res) => {
         console.log(res.data);
@@ -67,9 +65,7 @@ export default function RecipeCard({ recipe }) {
                 showConfirmButton: false,
                 timer: 1500,
               });
-              navigator.clipboard.writeText(
-                `${process.env.FRONT_URL}/recipes/${recipe.id}`
-              );
+              navigator.clipboard.writeText(`${frontUrl}/recipes/${recipe.id}`);
             }}
           />
         </Bottom>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import backUrl from '../utils/backUrl.js';
+import frontUrl from '../utils/frontUrl.js';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
 import Footer from './Footer';
@@ -26,10 +28,7 @@ export default function HomePage() {
       },
     };
     try {
-      const promise = await axios.get(
-        `${process.env.BACK_URL}/recipes`,
-        config
-      );
+      const promise = await axios.get(`${backUrl}/recipes`, config);
       setRecipes(promise.data);
       console.log(promise.data);
     } catch (error) {
@@ -55,10 +54,7 @@ export default function HomePage() {
               recipe={recipe}
               key={index}
               onClick={() =>
-                window.open(
-                  `${process.env.FRONT_URL}/recipes/${recipe.id}`,
-                  '_self'
-                )
+                window.open(`${frontUrl}/recipes/${recipe.id}`, '_self')
               }
             />
           ))

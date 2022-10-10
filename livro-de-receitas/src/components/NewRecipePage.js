@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Footer from './Footer';
 import Header from './Header';
 import Swal from 'sweetalert2';
+import backUrl from '../utils/backUrl.js';
 
 export default function NewRecipePage() {
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -53,7 +54,7 @@ export default function NewRecipePage() {
 
       if (result.isConfirmed) {
         const promise = axios.post(
-          `${process.env.BACK_URL}/recipes`,
+          `${backUrl}/recipes`,
           {
             title: recipeTitle,
             image: recipeImage,

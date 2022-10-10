@@ -6,6 +6,8 @@ import Footer from './Footer';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
 import heartDislike from '../assets/heart-dislike.svg';
+import backUrl from '../utils/backUrl.js';
+import frontUrl from '../utils/frontUrl.js';
 
 export default function LikedPage() {
   const [likedRecipes, setLikedRecipes] = useState();
@@ -27,7 +29,7 @@ export default function LikedPage() {
       },
     };
 
-    const promise = axios.get(`${process.env.BACK_URL}/likes`, config);
+    const promise = axios.get(`${backUrl}/likes`, config);
 
     promise
       .then((res) => {
@@ -57,10 +59,7 @@ export default function LikedPage() {
               recipe={recipe}
               key={index}
               onClick={() =>
-                window.open(
-                  `${process.env.FRONT_URL}/recipes/${recipe.id}`,
-                  '_self'
-                )
+                window.open(`${frontUrl}/recipes/${recipe.id}`, '_self')
               }
             />
           ))

@@ -11,6 +11,9 @@ import link from '../assets/link-outline.svg';
 import Header from './Header';
 import Footer from './Footer';
 
+import backUrl from '../utils/backUrl.js';
+import frontUrl from '../utils/frontUrl.js';
+
 export default function RecipePage() {
   const [isLiked, setIsLiked] = useState();
   const [recipeData, setRecipeData] = useState({});
@@ -29,7 +32,7 @@ export default function RecipePage() {
     };
 
     console.log(config);
-    const promise = axios.get(`${process.env.BACK_URL}/recipes/${id}`, config);
+    const promise = axios.get(`${backUrl}/recipes/${id}`, config);
     console.log(promise);
     promise
       .then((res) => {
@@ -55,11 +58,7 @@ export default function RecipePage() {
         Authorization: `Bearer ${token}`,
       },
     };
-    const promise = axios.post(
-      `${process.env.BACK_URL}/like/${recipeData.id}`,
-      {},
-      config
-    );
+    const promise = axios.post(`${backUrl}/like/${recipeData.id}`, {}, config);
     promise
       .then((res) => {
         setIsLiked(res.data);
@@ -127,7 +126,7 @@ export default function RecipePage() {
                   timer: 1500,
                 });
                 navigator.clipboard.writeText(
-                  `${process.env.FRONT_URL}/recipes/${recipeData.id}`
+                  `${frontUrl}/recipes/${recipeData.id}`
                 );
               }}
             />
