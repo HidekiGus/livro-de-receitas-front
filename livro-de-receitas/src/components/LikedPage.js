@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import Footer from './Footer';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
-import frontUrl from '../utils/frontUrl';
-import backUrl from '../utils/backUrl';
 import heartDislike from '../assets/heart-dislike.svg';
 
 export default function LikedPage() {
@@ -29,7 +27,7 @@ export default function LikedPage() {
       },
     };
 
-    const promise = axios.get(`${backUrl}/likes`, config);
+    const promise = axios.get(`${process.env.BACK_URL}/likes`, config);
 
     promise
       .then((res) => {
@@ -59,7 +57,10 @@ export default function LikedPage() {
               recipe={recipe}
               key={index}
               onClick={() =>
-                window.open(`${frontUrl}/recipes/${recipe.id}`, '_self')
+                window.open(
+                  `${process.env.FRONT_URL}/recipes/${recipe.id}`,
+                  '_self'
+                )
               }
             />
           ))
