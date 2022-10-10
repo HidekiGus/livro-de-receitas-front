@@ -67,10 +67,14 @@ export default function SignInPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <button type="submit" id="data-login">
+          Login
+        </button>
       </form>
       <Link to="/signup" style={{ textDecoration: 'none' }}>
-        <SignUp>Primeira vez aqui? Cadastre-se!</SignUp>
+        <SignUp id="data-login-to-signup">
+          Primeira vez aqui? Cadastre-se!
+        </SignUp>
       </Link>
     </Container>
   );

@@ -10,9 +10,11 @@ import backUrl from '../utils/backUrl';
 import heartDislike from '../assets/heart-dislike.svg';
 
 export default function LikedPage() {
-  const [likedRecipes, setLikedRecipes] = useState([]);
+  const [likedRecipes, setLikedRecipes] = useState();
 
   const navigate = useNavigate();
+
+  console.log(likedRecipes);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -30,14 +32,22 @@ export default function LikedPage() {
     const promise = axios.get(`${backUrl}/likes`, config);
 
     promise
-      .then((res) => setLikedRecipes(res.data))
+      .then((res) => {
+        if (res.data === null) {
+          return;
+        } else {
+          setLikedRecipes(res.data);
+        }
+      })
       .catch((err) => console.log(err));
   }, []);
 
   return (
     <>
       <Header />
-      {likedRecipes.length === 0 ? (
+      {likedRecipes === undefined ? (
+        ''
+      ) : likedRecipes.length === 0 ? (
         <Message>
           <img src={heartDislike} />
           <h1>Você ainda não curtiu nenhuma receita!</h1>

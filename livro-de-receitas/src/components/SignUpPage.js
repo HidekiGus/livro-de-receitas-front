@@ -103,9 +103,11 @@ export default function SignUpPage() {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button type="submit">Cadastrar</button>
+        <button type="submit" id="data-signup">
+          Cadastrar
+        </button>
       </form>
-      <Link to="/" style={{ textDecoration: 'none' }}>
+      <Link to="/" style={{ textDecoration: 'none' }} id="data-signup-to-login">
         <Login>Já tem uma conta? Faça login!</Login>
       </Link>
     </Container>

@@ -13,8 +13,6 @@ export default function RecipeCard({ recipe }) {
   const [isLiked, setIsLiked] = useState(recipe.isLiked);
   const navigate = useNavigate();
 
-  console.log(isLiked);
-
   function like(e) {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -27,6 +25,7 @@ export default function RecipeCard({ recipe }) {
     const promise = axios.post(`${backUrl}/like/${recipe.id}`, {}, config);
     promise
       .then((res) => {
+        console.log(res.data);
         setIsLiked(res.data);
       })
       .catch((error) => {
