@@ -165,8 +165,8 @@ const Container = styled.div`
     width: 70vw;
     height: 7vh;
     border-radius: 8px;
-    border: 1px solid #0b8049;
-    background-color: #0b8049;
+    border: 1px solid #0c7845;
+    background-color: #0c7845;
     font-family: 'Patrick Hand';
     font-weight: 700;
     font-size: 25px;

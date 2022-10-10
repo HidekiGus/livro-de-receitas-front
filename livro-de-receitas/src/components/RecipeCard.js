@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import emptyHeart from '../assets/heart-outline.svg';
 import fullHeart from '../assets/heart.svg';
 import link from '../assets/link-outline.svg';
 import backUrl from '../utils/backUrl';
+import frontUrl from '../utils/frontUrl';
 import Swal from 'sweetalert2';
 
-export default function Recipe({ recipe }) {
+export default function RecipeCard({ recipe }) {
   const [isLiked, setIsLiked] = useState(recipe.isLiked);
-  const [isShowingAlert, setShowingAlert] = useState(false);
+  const navigate = useNavigate();
+
+  console.log(isLiked);
 
   function like(e) {
     e.preventDefault();
@@ -20,7 +24,6 @@ export default function Recipe({ recipe }) {
         Authorization: `Bearer ${token}`,
       },
     };
-    console.log(config);
     const promise = axios.post(`${backUrl}/like/${recipe.id}`, {}, config);
     promise
       .then((res) => {
@@ -35,14 +38,16 @@ export default function Recipe({ recipe }) {
     <>
       <div />
       <RecipeContainer>
-        <Top>
-          <img src={recipe.image} />
-          <h1>{recipe.title}</h1>
-        </Top>
-        <Middle>
-          <h1>⏲️ {recipe.time} minutos</h1>
-          <h1>Rende: {recipe.portions} porções</h1>
-        </Middle>
+        <AboveLine onClick={() => navigate(`/recipes/${recipe.id}`)}>
+          <Top>
+            <img src={recipe.image} />
+            <h1>{recipe.title}</h1>
+          </Top>
+          <Middle>
+            <h1>⏲️ {recipe.time} minutos</h1>
+            <h1>Rende: {recipe.portions} porções</h1>
+          </Middle>
+        </AboveLine>
         <Line />
         <Bottom>
           {isLiked ? (
@@ -61,7 +66,7 @@ export default function Recipe({ recipe }) {
                 showConfirmButton: false,
                 timer: 1500,
               });
-              navigator.clipboard.writeText('dingoubeu');
+              navigator.clipboard.writeText(`${frontUrl}/recipes/${recipe.id}`);
             }}
           />
         </Bottom>
@@ -74,7 +79,7 @@ const RecipeContainer = styled.div`
   font-family: 'Patrick hand';
   width: 90vw;
   height: 230px;
-  background-color: #0ea960;
+  background-color: #0c7845;
   margin-top: 20px;
   border: 1px solid;
   border-radius: 8px;
@@ -91,11 +96,12 @@ const Top = styled.div`
   img {
     max-height: 100px;
     max-width: 160px;
+    border: 1px solid black;
     border-radius: 8px;
   }
 
   h1 {
-    font-size: 25px;
+    font-size: 30px;
     width: 150px;
   }
 `;
@@ -109,7 +115,8 @@ const Middle = styled.div`
   flex-direction: row;
 
   h1 {
-    font-size: 20px;
+    font-size: 23px;
+    padding-bottom: 20px;
   }
 `;
 
@@ -130,4 +137,9 @@ const Line = styled.div`
   width: 100%;
   height: 2px;
   background-color: black;
+`;
+
+const AboveLine = styled.div`
+  width: 90vw;
+  height: 190px;
 `;
