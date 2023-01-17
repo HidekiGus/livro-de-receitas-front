@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import backUrl from '../utils/backUrl';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export default function SignInPage() {
       password,
     };
 
-    const promise = axios.post('http://localhost:4000/login', body);
+    const promise = axios.post(`${backUrl}/login`, body);
 
     promise.then((response) => {
       const token = response.data;

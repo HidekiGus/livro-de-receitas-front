@@ -214,7 +214,7 @@ const NewRecipeContainer = styled.div`
 `;
 
 const TitleContainer = styled.div`
-  width: 90vw;
+  width: 80vw;
   height: fit-content;
   padding-top: 10px;
   padding-bottom: 20px;
