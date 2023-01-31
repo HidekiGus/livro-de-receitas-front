@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import backUrl from '../utils/backUrl.js';
 import frontUrl from '../utils/frontUrl.js';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
@@ -14,6 +13,8 @@ export default function HomePage() {
   const [text, setText] = useState('');
   const [recipes, setRecipes] = useState(null);
   const [error, setError] = useState(null);
+
+  const backUrl = process.env.REACT_APP_BACK_URL;
 
   const navigate = useNavigate();
 

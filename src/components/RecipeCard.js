@@ -6,11 +6,11 @@ import emptyHeart from '../assets/heart-outline.svg';
 import fullHeart from '../assets/heart.svg';
 import link from '../assets/link-outline.svg';
 import Swal from 'sweetalert2';
-import backUrl from '../utils/backUrl.js';
 import frontUrl from '../utils/frontUrl.js';
 
 export default function RecipeCard({ recipe }) {
   const [isLiked, setIsLiked] = useState(recipe.isLiked);
+  const backUrl = process.env.REACT_APP_BACK_URL;
   const navigate = useNavigate();
 
   function like(e) {

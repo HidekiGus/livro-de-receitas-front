@@ -6,11 +6,12 @@ import Footer from './Footer';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
 import heartDislike from '../assets/heart-dislike.svg';
-import backUrl from '../utils/backUrl.js';
 import frontUrl from '../utils/frontUrl.js';
 
 export default function LikedPage() {
   const [likedRecipes, setLikedRecipes] = useState();
+
+  const backUrl = process.env.REACT_APP_BACK_URL;
 
   const navigate = useNavigate();
 

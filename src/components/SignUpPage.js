@@ -13,6 +13,8 @@ export default function SignUpPage() {
   const navigate = useNavigate();
 
   function signUp(event) {
+    const backUrl = process.env.REACT_APP_BACK_URL;
+
     event.preventDefault();
 
     setIsDisabled(true);
@@ -24,7 +26,7 @@ export default function SignUpPage() {
       confirmPassword,
     };
 
-    const promise = axios.post('http://localhost:4000/signup', body);
+    const promise = axios.post(`${backUrl}/signup`, body);
 
     promise.then(() => {
       Swal.fire({

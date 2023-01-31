@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Footer from './Footer';
 import Header from './Header';
 import Swal from 'sweetalert2';
-import backUrl from '../utils/backUrl.js';
 
 export default function NewRecipePage() {
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -15,6 +14,8 @@ export default function NewRecipePage() {
   const [recipeIngredients, setRecipeIngredients] = useState([]);
   const [recipeMethod, setRecipeMethod] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const backUrl = process.env.REACT_APP_BACK_URL;
 
   const navigate = useNavigate();
 

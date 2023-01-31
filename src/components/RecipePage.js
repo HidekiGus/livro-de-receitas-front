@@ -11,12 +11,12 @@ import link from '../assets/link-outline.svg';
 import Header from './Header';
 import Footer from './Footer';
 
-import backUrl from '../utils/backUrl.js';
 import frontUrl from '../utils/frontUrl.js';
 
 export default function RecipePage() {
   const [isLiked, setIsLiked] = useState();
   const [recipeData, setRecipeData] = useState({});
+  const backUrl = process.env.REACT_APP_BACK_URL;
   const navigate = useNavigate();
   const { id } = useParams();
 

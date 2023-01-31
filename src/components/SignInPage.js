@@ -3,13 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import backUrl from '../utils/backUrl';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
+  const backUrl = process.env.REACT_APP_BACK_URL;
 
   function signIn(event) {
     event.preventDefault();
