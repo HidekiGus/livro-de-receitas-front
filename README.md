@@ -2,6 +2,8 @@
 
 ## 📗 Bem-vindo ao Livro de Receitas!
 
+💻 Para visitar o projeto, acesse [livrodereceitas.app](https://livrodereceitas.app)
+
 ### Tecnologias utilizadas
 
 ![React](https://img.shields.io/badge/-React-black?style=for-the-badge&logo=react)
@@ -11,6 +13,7 @@
 ![styled-components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 ![Cypress](https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white)
+![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 ❗ Este é o front-end do projeto. Para acessar o back-end, acesse o repositório [aqui](https://github.com/HidekiGus/livro-de-receitas-back).
 
