@@ -36,6 +36,11 @@ const FooterContainer = styled.div`
 
   img {
     width: 5vh;
+    transform: ;
+  }
+
+  img:hover {
+
   }
 `;
 
