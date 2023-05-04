@@ -44,7 +44,7 @@ export default function RecipeCard({ recipe }) {
           </Top>
           <Middle>
             <h1>⏲️ {recipe.time} minutos</h1>
-            <h1>Rende: {recipe.portions} porções</h1>
+            <h1>{recipe.portions} porções</h1>
           </Middle>
         </AboveLine>
         <Line />
@@ -77,52 +77,44 @@ export default function RecipeCard({ recipe }) {
 const RecipeContainer = styled.div`
   font-family: 'Patrick hand';
   width: 90vw;
+  max-width: 450px;
   height: 230px;
   background-color: #0c7845;
   margin-top: 20px;
   border: 1px solid;
   border-radius: 8px;
-
-  @media (min-width: 600px) {
-    width: 450px;
-  }
 `;
 
 const Top = styled.div`
   width: 90vw;
   height: 150px;
+  max-width: 480px;
 
   display: flex;
   align-items: center;
-  justify-content: space-around;
 
   img {
-    height: 100px;
-    width: 160px;
-    border: 1px solid black;
+    height: 117px;
+    width: 208px;
+    max-width: 208px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 8px;
+    margin-right: 20px;
+    margin-left: 20px;
+    box-shadow: 2px 3px 9px 2px rgba(0, 0, 0, 0.3);
   }
 
   h1 {
-    font-size: 25px;
+    font-family: 'Twinkle Star';
+    font-size: 42px;
     width: 150px;
-  }
-  @media (min-width: 600px) {
-    width: 450px;
-
-    img {
-      height: 120px;
-      width: 200px;
-    }
-
-    h1 {
-      font-size: 32px;
-    }
+    margin-right: 30px
   }
 `;
 
 const Middle = styled.div`
   width: 90vw;
+  max-width: 450px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -130,17 +122,14 @@ const Middle = styled.div`
   flex-direction: row;
 
   h1 {
-    font-size: 23px;
+    font-size: 26px;
     padding-bottom: 20px;
-  }
-
-  @media (min-width: 600px) {
-    width: 450px;
   }
 `;
 
 const Bottom = styled.div`
   width: 90vw;
+  max-width: 450px;
   height: 40px;
 
   display: flex;
@@ -149,10 +138,12 @@ const Bottom = styled.div`
 
   img {
     height: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
   }
 
-  @media (min-width: 600px) {
-    width: 450px;
+  img:hover {
+    transform: scale(1.3) rotate(0.015turn);
   }
 `;
 

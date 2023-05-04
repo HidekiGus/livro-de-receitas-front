@@ -6,6 +6,7 @@ import frontUrl from '../utils/frontUrl.js';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
 import Footer from './Footer';
+import { TailSpin } from 'react-loader-spinner';
 
 export default function HomePage() {
   const token = localStorage.getItem('token');
@@ -17,6 +18,10 @@ export default function HomePage() {
   const backUrl = process.env.REACT_APP_BACK_URL;
 
   const navigate = useNavigate();
+
+  const frases = ["Preparando receitas pra você", "Receitinhas chegando"];
+  const aleatorio = Math.floor(Math.random() * frases.length);
+  let fala = frases[aleatorio];
 
   useEffect(async () => {
     if (token === null) {
@@ -42,7 +47,19 @@ export default function HomePage() {
       <Header />
       <RecipesContainer>
         {recipes === null && error === null ? (
-          <h1>Preparando receitas pra você...</h1>
+        <WaitingScreen>            
+            <TailSpin
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            />
+            <Loading>{fala}</Loading>
+          </WaitingScreen>
         ) : recipes === null && error !== null ? (
           <h1>
             Ops! Parece que as receitas não deram certo, atualize a página!
@@ -77,3 +94,16 @@ const RecipesContainer = styled.div`
   height: fit-content;
   flex-wrap: wrap;
 `;
+
+const Loading = styled.h1`
+  margin-top: 100px;
+  font-size: 35px;
+`
+
+const WaitingScreen = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 250px;
+`
