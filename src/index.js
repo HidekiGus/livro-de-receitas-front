@@ -16,8 +16,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/" element={<SignInPage />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home" element={<SignInPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/recipes/:id" element={<RecipePage />} />
         <Route path="/liked" element={<LikedPage />} />
         <Route path="/recipes/new" element={<NewRecipePage />} />

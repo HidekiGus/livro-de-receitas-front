@@ -24,9 +24,9 @@ export default function HomePage() {
   let fala = frases[aleatorio];
 
   useEffect(async () => {
-    if (token === null) {
-      navigate('/');
-    }
+    //if (token === null) {
+    //  navigate('/');
+    //}
 
     const config = {
       headers: {
@@ -51,7 +51,7 @@ export default function HomePage() {
             <TailSpin
             height="80"
             width="80"
-            color="#4fa94d"
+            color="#ff6600"
             ariaLabel="tail-spin-loading"
             radius="1"
             wrapperStyle={{}}
@@ -72,7 +72,7 @@ export default function HomePage() {
               recipe={recipe}
               key={index}
               onClick={() =>
-                window.open(`${frontUrl}/recipes/${recipe.id}`, '_self')
+                window.open(`${frontUrl}/recipes/${recipe._id}`, '_self')
               }
             />
           ))

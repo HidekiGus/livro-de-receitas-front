@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 export default function SignUpPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
@@ -22,6 +23,7 @@ export default function SignUpPage() {
     const body = {
       name,
       email,
+      username,
       password,
       confirmPassword,
     };
@@ -91,6 +93,14 @@ export default function SignUpPage() {
         />
         <input
           required
+          type="text"
+          disabled={isDisabled}
+          placeholder="Nome de usuário"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          required
           type="password"
           disabled={isDisabled}
           placeholder="Senha"
@@ -132,7 +142,7 @@ const Container = styled.div`
     font-weight: 400;
     color: #ffffff;
     padding-bottom: 5vh;
-    padding-top: 25vh;
+    padding-top: 13vh;
     @media (max-width: 450px) {
       font-size: 12vw;
     }
