@@ -22,10 +22,9 @@ export default function RecipeCard({ recipe }) {
         Authorization: `Bearer ${token}`,
       },
     };
-    const promise = axios.post(`${backUrl}/like/${recipe.id}`, {}, config);
+    const promise = axios.post(`${backUrl}/like/${recipe._id}`, {}, config);
     promise
       .then((res) => {
-        console.log(res.data);
         setIsLiked(res.data);
       })
       .catch((error) => {
@@ -35,9 +34,8 @@ export default function RecipeCard({ recipe }) {
 
   return (
     <>
-      <div />
       <RecipeContainer>
-        <AboveLine onClick={() => navigate(`/recipes/${recipe.id}`)}>
+        <AboveLine onClick={() => navigate(`/recipes/${recipe._id}`)}>
           <Top>
             <img src={recipe.image} />
             <h1>{recipe.title}</h1>
@@ -50,9 +48,9 @@ export default function RecipeCard({ recipe }) {
         <Line />
         <Bottom>
           {isLiked ? (
-            <img src={fullHeart} onClick={like} />
+            <Image isLiked={isLiked} src={fullHeart} onClick={like} />
           ) : (
-            <img src={emptyHeart} color="red" onClick={like} />
+            <Image isLiked={isLiked} src={emptyHeart} onClick={like} />
           )}
 
           <img
@@ -65,7 +63,7 @@ export default function RecipeCard({ recipe }) {
                 showConfirmButton: false,
                 timer: 1500,
               });
-              navigator.clipboard.writeText(`${frontUrl}/recipes/${recipe.id}`);
+              navigator.clipboard.writeText(`${frontUrl}/recipes/${recipe._id}`);
             }}
           />
         </Bottom>
@@ -79,10 +77,11 @@ const RecipeContainer = styled.div`
   width: 90vw;
   max-width: 450px;
   height: 230px;
-  background-color: #0c7845;
+  background-color: #E6E6E6;
   margin-top: 20px;
-  border: 1px solid;
-  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  box-shadow: 3px 5px 9px 2px rgba(0, 0, 0, 0.35);
 `;
 
 const Top = styled.div`
@@ -97,8 +96,8 @@ const Top = styled.div`
     height: 117px;
     width: 208px;
     max-width: 208px;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
+    border: 1px solid #FF6600;
+    border-radius: 15px;
     margin-right: 20px;
     margin-left: 20px;
     box-shadow: 2px 3px 9px 2px rgba(0, 0, 0, 0.3);
@@ -109,6 +108,12 @@ const Top = styled.div`
     font-size: 42px;
     width: 150px;
     margin-right: 30px
+  }
+
+  @media (max-width: 800px) {
+    h1 {
+      font-size: 24px;
+    }
   }
 `;
 
@@ -127,6 +132,11 @@ const Middle = styled.div`
   }
 `;
 
+const Image = styled.img`
+  height: ${props => props.isLiked ? "36px" : "30px"};
+  width: ${props => props.isLiked ? "36px" : "30px"};
+`
+
 const Bottom = styled.div`
   width: 90vw;
   max-width: 450px;
@@ -137,9 +147,10 @@ const Bottom = styled.div`
   justify-content: space-around;
 
   img {
-    height: 30px;
-    cursor: pointer;
+    height: 38px;
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    filter: invert(54%) sepia(34%) saturate(6920%) hue-rotate(359deg) brightness(99%) contrast(108%);
   }
 
   img:hover {
@@ -150,7 +161,7 @@ const Bottom = styled.div`
 const Line = styled.div`
   width: 100%;
   height: 2px;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
 `;
 
 const AboveLine = styled.div`
