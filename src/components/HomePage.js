@@ -96,8 +96,10 @@ const RecipesContainer = styled.div`
 `;
 
 const Loading = styled.h1`
-  margin-top: 100px;
+  margin-top: 80px;
   font-size: 35px;
+  max-width: 80vw;
+  text-align: center;
 `
 
 const WaitingScreen = styled.div`
@@ -105,5 +107,5 @@ const WaitingScreen = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 250px;
+  margin-top: 25vh;
 `
