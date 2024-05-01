@@ -35,7 +35,7 @@ export default function RecipeCard({ recipe }) {
   return (
     <>
       <RecipeContainer>
-        <AboveLine onClick={() => navigate(`/recipes/${recipe._id}`)}>
+        <AboveLine onClick={() => navigate(`/recipes/${recipe.title}`)}>
           <Top>
             <img src={recipe.image} />
             <h1>{recipe.title}</h1>

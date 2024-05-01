@@ -28,25 +28,17 @@ export default function HomePage() {
     //  navigate('/');
     //}
 
-    const config = {
+    /* const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    };
+    }; */
     try {
       //const promise = await axios.get(`${backUrl}/recipes`, config);
-      //setRecipes(promise.data);
-      const recipes = [{
-        title: "receita1",
-        image: "https://www.google.com.br/url?sa=i&url=https%3A%2F%2Fwww.oetker.com.br%2Freceitas%2Fr%2Ftorta-de-limao&psig=AOvVaw1kbWm-WeagznkiWnYS27yI&ust=1713473206396000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOj0x5mQyoUDFQAAAAAdAAAAABAE",
-        portions: 6,
-        time: 20,
-        ingredients: ["frango", "massa de torta"],
-        method: ["mistura tudo", "assa por 30 minutos"],
-        isLiked: false
-      }];
-      setRecipes(recipes);
-      //console.log(promise.data);
+      const promise = await axios.get(`${backUrl}/recipes`);
+      setRecipes(promise.data);
+      
+      console.log(promise.data);
     } catch (error) {
       console.log(error);
     }
