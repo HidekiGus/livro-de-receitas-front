@@ -85,6 +85,7 @@ const RecipeContainer = styled.div`
 `;
 
 const Top = styled.div`
+  position: relative;
   width: 90vw;
   height: 150px;
   max-width: 480px;
@@ -93,21 +94,24 @@ const Top = styled.div`
   align-items: center;
 
   img {
+    position: relative;
+    top: -16px;
+    left 0;
     height: 117px;
     width: 208px;
     max-width: 208px;
     border: 1px solid #FF6600;
-    border-radius: 15px;
-    margin-right: 20px;
-    margin-left: 20px;
+    border-radius: 24px;
     box-shadow: 2px 3px 9px 2px rgba(0, 0, 0, 0.3);
   }
 
   h1 {
+  position: absolute;
+    top: 20px;
+    left: 215px;
     font-family: 'Twinkle Star';
     font-size: 42px;
     width: 150px;
-    margin-right: 30px
   }
 
   @media (max-width: 800px) {

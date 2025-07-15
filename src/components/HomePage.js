@@ -18,6 +18,12 @@ export default function HomePage() {
   const backUrl = process.env.REACT_APP_BACK_URL;
 
   const navigate = useNavigate();
+  const testes = { data:
+     { recipes: [
+        {title: "Oii", time: 10, portions: 2},
+        {title: "Torta de Frango com Requeijão", time: 10, portions: 2},
+        {title: "Bolo de Cenoura com Cobertura de Chocolate", time: 10, portions: 2},
+      ]}};
 
   const frases = ["Preparando receitas pra você", "Receitinhas chegando"];
   const aleatorio = Math.floor(Math.random() * frases.length);
@@ -35,10 +41,11 @@ export default function HomePage() {
     }; */
     try {
       //const promise = await axios.get(`${backUrl}/recipes`, config);
-      const promise = await axios.get(`${backUrl}/recipes`);
-      setRecipes(promise.data);
-      
-      console.log(promise.data);
+      //const promise = await axios.get(`${backUrl}/recipes`);
+      //const promise = testes;
+      //setRecipes(promise.data);
+      const receitas = setRecipes(testes.data.recipes);
+      console.log(receitas);
     } catch (error) {
       console.log(error);
     }
