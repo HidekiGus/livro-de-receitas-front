@@ -8,6 +8,13 @@ import link from '../assets/link-outline.svg';
 import Swal from 'sweetalert2';
 import frontUrl from '../utils/frontUrl.js';
 
+const fontFamilyPrimary = "'Patrick hand'";
+const fontFamilySecondary = "'Twinkle Star'";
+const backgroundColor = "rgba(238, 238, 238, 0.91)";
+const boxShadowColor = "rgba(0, 0, 0, 0.33)";
+const lineColor = "rgba(0, 0, 0, 0.4)";
+const imgFilter = "invert(54%) sepia(34%) saturate(6920%) hue-rotate(359deg) brightness(99%) contrast(108%)";
+
 export default function RecipeCard({ recipe }) {
   const [isLiked, setIsLiked] = useState(recipe.isLiked);
   const backUrl = process.env.REACT_APP_BACK_URL;
@@ -35,7 +42,7 @@ export default function RecipeCard({ recipe }) {
   return (
     <>
       <RecipeContainer>
-        <AboveLine onClick={() => navigate(`/recipes/${recipe.title}`)}>
+        <AboveLine onClick={() => navigate(`/recipes/${recipe._id}`)}>
           <Top>
             <img src={recipe.image} />
             <h1>{recipe.title}</h1>
@@ -73,15 +80,14 @@ export default function RecipeCard({ recipe }) {
 }
 
 const RecipeContainer = styled.div`
-  font-family: 'Patrick hand';
+  font-family: ${fontFamilyPrimary};
   width: 90vw;
   max-width: 450px;
   height: 230px;
-  background-color: #E6E6E6;
+  background-color: ${backgroundColor};
   margin-top: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 24px;
-  box-shadow: 3px 5px 9px 2px rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  box-shadow: 1px 2px 10px 1px ${boxShadowColor};
 `;
 
 const Top = styled.div`
@@ -94,20 +100,19 @@ const Top = styled.div`
 
   img {
     height: 117px;
-    width: 208px;
+    width: 100%;
     max-width: 208px;
-    border: 1px solid #FF6600;
-    border-radius: 15px;
+    border-radius: 10px;
     margin-right: 20px;
     margin-left: 20px;
-    box-shadow: 2px 3px 9px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 3px 1px ${boxShadowColor};
   }
 
   h1 {
-    font-family: 'Twinkle Star';
+    font-family: ${fontFamilySecondary};
     font-size: 42px;
     width: 150px;
-    margin-right: 30px
+    margin-right: 30px;
   }
 
   @media (max-width: 800px) {
@@ -135,7 +140,7 @@ const Middle = styled.div`
 const Image = styled.img`
   height: ${props => props.isLiked ? "36px" : "30px"};
   width: ${props => props.isLiked ? "36px" : "30px"};
-`
+`;
 
 const Bottom = styled.div`
   width: 90vw;
@@ -150,7 +155,7 @@ const Bottom = styled.div`
     height: 38px;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
-    filter: invert(54%) sepia(34%) saturate(6920%) hue-rotate(359deg) brightness(99%) contrast(108%);
+    filter: ${imgFilter};
   }
 
   img:hover {
@@ -160,8 +165,8 @@ const Bottom = styled.div`
 
 const Line = styled.div`
   width: 100%;
-  height: 2px;
-  background-color: rgba(0, 0, 0, 0.4);
+  height: 1px;
+  background-color: ${lineColor};
 `;
 
 const AboveLine = styled.div`

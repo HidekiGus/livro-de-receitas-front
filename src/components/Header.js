@@ -7,7 +7,6 @@ export default function Header() {
       <HeaderContainer>
         <h1>Livro de Receitas</h1>
       </HeaderContainer>
-      <Line />
     </>
   );
 }
@@ -16,7 +15,7 @@ const HeaderContainer = styled.div`
   width: 100vw;
   height: 10vh;
   min-height: 60px;
-  background: linear-gradient(to right, #FF6600, #e6e6e6, #FF6600 );
+  background: linear-gradient(to right, #FF6600,rgb(250, 69, 49), #FF6600 );
   display: flex;
   align-items: center;
   justify-content: center;

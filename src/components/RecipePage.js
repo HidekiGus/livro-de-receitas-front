@@ -14,58 +14,69 @@ import Footer from './Footer';
 import frontUrl from '../utils/frontUrl.js';
 
 export default function RecipePage() {
+  const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState();
   const [recipeData, setRecipeData] = useState({});
   const backUrl = process.env.REACT_APP_BACK_URL;
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const token = localStorage.getItem('token');
-
   useEffect(() => {
-    console.log(token);
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const fetchRecipeData = async () => {
+      try {
+        const token = getToken();
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const res = await axios.get(`${backUrl}/recipes/${id}`, config);
+        setRecipeDataFromRes(res);
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to fetch recipe data!',
+        });
+      } finally {
+        setLoading(false);
+      }
     };
 
-    console.log(config);
-    const promise = axios.get(`${backUrl}/recipes/${id}`, config);
-    console.log(promise);
-    promise
-      .then((res) => {
-        setRecipeDataFromRes(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    fetchRecipeData();
+  }, [id]);
+
+  function getToken() {
+    return localStorage.getItem('token');
+  }
 
   function setRecipeDataFromRes(res) {
-    console.log(res.data);
     setIsLiked(res.data.isLiked);
     setRecipeData(res.data);
   }
 
-  function like(e) {
+  async function like(e) {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const promise = axios.post(`${backUrl}/like/${recipeData.id}`, {}, config);
-    promise
-      .then((res) => {
-        setIsLiked(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      const token = getToken();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.post(`${backUrl}/like/${recipeData.id}`, {}, config);
+      setIsLiked(res.data);
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Failed to like the recipe!',
       });
+    }
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -73,15 +84,17 @@ export default function RecipePage() {
       <Header />
       <Container>
         <RecipeContainer>
-          <AboveLine onClick={() => navigate(`/recipes/${recipeData.id}`)}>
+          <AboveLine onClick={() => navigate(`/recipes/${recipeData._id}`)}>
             <Top>
-              <img src={recipeData.image} />
-              <h1>{recipeData.title}</h1>
+              <img src={recipeData.image} alt={recipeData.title} />
             </Top>
             <TopMiddle>
+              <h1>{recipeData.title}</h1>
+            </TopMiddle>
+            <TopBottom>
               <h1>⏲️ {recipeData.time} minutos</h1>
               <h1>Rende: {recipeData.portions} porções</h1>
-            </TopMiddle>
+            </TopBottom>
             <BottomMiddle>
               <h1>🛒 Ingredientes</h1>
               {recipeData.ingredients === undefined ? (
@@ -89,7 +102,7 @@ export default function RecipePage() {
               ) : (
                 <ul>
                   {recipeData.ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient.description}</li>
+                    <li key={index}>{ingredient}</li>
                   ))}
                 </ul>
               )}
@@ -99,7 +112,7 @@ export default function RecipePage() {
               ) : (
                 <ol>
                   {recipeData.method.map((method, index) => (
-                    <li key={index}>{method.description}</li>
+                    <li key={index}>{method}</li>
                   ))}
                 </ol>
               )}
@@ -107,12 +120,12 @@ export default function RecipePage() {
           </AboveLine>
           <Line />
           <Bottom>
-            {token === null ? (
+            {getToken() === null ? (
               ''
             ) : isLiked ? (
-              <img src={fullHeart} onClick={like} />
+              <img src={fullHeart} onClick={like} alt="Liked" />
             ) : (
-              <img src={emptyHeart} color="red" onClick={like} />
+              <img src={emptyHeart} color="red" onClick={like} alt="Not Liked" />
             )}
 
             <img
@@ -129,6 +142,7 @@ export default function RecipePage() {
                   `${frontUrl}/recipes/${recipeData.id}`
                 );
               }}
+              alt="Copy Link"
             />
           </Bottom>
         </RecipeContainer>
@@ -159,37 +173,55 @@ const RecipeContainer = styled.div`
 
 const Top = styled.div`
   width: 90vw;
-  height: 150px;
+  height: 30vh;
 
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 
   img {
-    height: 100px;
-    width: 160px;
+    height: 90%;
+    width: 90%;
+    object-fit: cover;
+    object-position: center;
     border: 1px solid black;
     border-radius: 8px;
   }
 
-  h1 {
-    font-size: 30px;
-    width: 150px;
-  }
-
-  @media (min-width: 600px) {
-    h1 {
-      font-size: 40px;
-    }
-
+  /* @media (min-width: 600px) {
     img {
       height: 120px;
       width: 200px;
     }
-  }
+  } */
 `;
 
 const TopMiddle = styled.div`
+  width: 90vw;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  h1 {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 1px;
+    padding: 10px;
+    width: 90%;
+    overflow-y: auto;
+  }
+
+  @media (min-width: 600px) {
+    h1 {
+      font-size: 30px;
+    }
+  }
+`
+
+const TopBottom = styled.div`
   width: 90vw;
   height: 20px;
   display: flex;
@@ -201,6 +233,7 @@ const TopMiddle = styled.div`
 
   h1 {
     font-size: 24px;
+    font-weight: bold;
   }
 `;
 

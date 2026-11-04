@@ -11,7 +11,6 @@ export default function Footer() {
   return (
     <>
       <FooterContainer>
-        <Line />
         <Images>
           <img onClick={() => navigate('/recipes/new')} src={plus} />
           <img onClick={() => navigate('/home')} src={house} />
@@ -23,24 +22,24 @@ export default function Footer() {
 }
 
 const FooterContainer = styled.div`
-  width: 100vw;
+  width: 90vw;
   height: 8vh;
   background-color: #FF6600;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  border-radius: 50px;
 
   position: fixed;
-  bottom: 0;
+  bottom: 15px;
+  left: 5vw;
 
   img {
     width: 5vh;
-    transform: ;
   }
 
   img:hover {
-
   }
 `;
 

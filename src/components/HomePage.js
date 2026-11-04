@@ -7,65 +7,71 @@ import RecipeCard from './RecipeCard';
 import Header from './Header';
 import Footer from './Footer';
 import { TailSpin } from 'react-loader-spinner';
+import Swal from 'sweetalert2';
 
 export default function HomePage() {
-  const token = localStorage.getItem('token');
-
   const [text, setText] = useState('');
   const [recipes, setRecipes] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const backUrl = process.env.REACT_APP_BACK_URL;
-
   const navigate = useNavigate();
 
   const frases = ["Preparando receitas pra você", "Receitinhas chegando"];
   const aleatorio = Math.floor(Math.random() * frases.length);
   let fala = frases[aleatorio];
 
-  useEffect(async () => {
-    //if (token === null) {
-    //  navigate('/');
-    //}
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const token = getToken();
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const promise = await axios.get(`${backUrl}/recipes`, config);
+        setRecipes(promise.data);
+      } catch (error) {
+        setError(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to fetch recipes!',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    /* const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }; */
-    try {
-      //const promise = await axios.get(`${backUrl}/recipes`, config);
-      const promise = await axios.get(`${backUrl}/recipes`);
-      setRecipes(promise.data);
-      
-      console.log(promise.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+    fetchRecipes();
+  }, [backUrl]);
+
+  function getToken() {
+    return localStorage.getItem('token');
+  }
 
   return (
     <>
       <Header />
       <RecipesContainer>
         {recipes === null && error === null ? (
-        <WaitingScreen>            
+          <WaitingScreen>
             <TailSpin
-            height="80"
-            width="80"
-            color="#ff6600"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
+              height="80"
+              width="80"
+              color="#ff6600"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
             />
             <Loading>{fala}</Loading>
           </WaitingScreen>
-        ) : recipes === null && error !== null ? (
-          <h1>
-            Ops! Parece que as receitas não deram certo, atualize a página!
-          </h1>
+        ) : error ? (
+          <h1>Ops! Parece que as receitas não deram certo, atualize a página!</h1>
         ) : recipes.length === 0 ? (
           <h1>Ainda não há receitas por aqui!</h1>
         ) : (
@@ -90,7 +96,7 @@ const RecipesContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   flex-direction: row;
-  margin-bottom: 10vh; //8vh from Footer + 2vh for spacing between last post and footer
+  margin-bottom: 2vh; //8vh from Footer + 2vh for spacing between last post and footer
 
   width: 100vw;
   height: fit-content;
