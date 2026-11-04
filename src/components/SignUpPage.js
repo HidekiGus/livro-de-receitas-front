@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import { api } from '../services/api';
 
 export default function SignUpPage() {
   const [name, setName] = useState('');
@@ -13,24 +13,19 @@ export default function SignUpPage() {
   const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
 
-  function signUp(event) {
-    const backUrl = process.env.REACT_APP_BACK_URL;
-
+  async function signUp(event) {
     event.preventDefault();
-
     setIsDisabled(true);
 
-    const body = {
-      name,
-      email,
-      username,
-      password,
-      confirmPassword,
-    };
+    try {
+      await api.post('/signup', {
+        name,
+        email,
+        username,
+        password,
+        confirmPassword,
+      });
 
-    const promise = axios.post(`${backUrl}/signup`, body);
-
-    promise.then(() => {
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -38,12 +33,12 @@ export default function SignUpPage() {
         showConfirmButton: false,
         timer: 2000,
       });
-      navigate('/');
-    });
-
-    promise.catch((error) => {
+      navigate('/login');
+    } catch (error) {
       setIsDisabled(false);
-      if (error.response.status === 400) {
+      const status = error.response?.status;
+
+      if (status === 400) {
         Swal.fire({
           position: 'center',
           icon: 'warning',
@@ -51,7 +46,7 @@ export default function SignUpPage() {
           showConfirmButton: false,
           timer: 2000,
         });
-      } else if (error.response.status === 409) {
+      } else if (status === 409) {
         Swal.fire({
           position: 'center',
           icon: 'warning',
@@ -59,7 +54,7 @@ export default function SignUpPage() {
           showConfirmButton: false,
           timer: 2000,
         });
-      } else if (error.response.status === 422) {
+      } else {
         Swal.fire({
           position: 'center',
           icon: 'error',
@@ -68,7 +63,7 @@ export default function SignUpPage() {
           timer: 2000,
         });
       }
-    });
+    }
   }
 
   return (
@@ -85,7 +80,7 @@ export default function SignUpPage() {
         />
         <input
           required
-          type="text"
+          type="email"
           disabled={isDisabled}
           placeholder="Email"
           value={email}
@@ -115,18 +110,22 @@ export default function SignUpPage() {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button type="submit" id="data-signup">
+        <button type="submit" id="data-signup" disabled={isDisabled}>
           Cadastrar
         </button>
       </form>
-      <Link to="/" style={{ textDecoration: 'none' }} id="data-signup-to-login">
+      <Link
+        to="/login"
+        style={{ textDecoration: 'none' }}
+        id="data-signup-to-login"
+      >
         <Login>Já tem uma conta? Faça login!</Login>
       </Link>
     </Container>
   );
 }
 
-const Container = styled.div`
+const Container = styled.main`
   height: 100vh;
   width: 100vw;
   background-color: #0ea960;
@@ -188,6 +187,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     @media (min-width: 600px) {
       width: 500px;
@@ -197,7 +197,7 @@ const Container = styled.div`
   }
 `;
 
-const Login = styled.div`
+const Login = styled.p`
   font-family: 'Patrick Hand';
   font-weight: 400;
   font-size: 22px;

@@ -9,22 +9,32 @@ export default function Footer() {
   const navigate = useNavigate();
 
   return (
-    <>
-      <FooterContainer>
-        <Images>
-          <img onClick={() => navigate('/recipes/new')} src={plus} />
-          <img onClick={() => navigate('/home')} src={house} />
-          <img onClick={() => navigate('/liked')} src={fullHeart} />
-        </Images>
-      </FooterContainer>
-    </>
+    <FooterContainer>
+      <Images>
+        <img
+          onClick={() => navigate('/recipes/new')}
+          src={plus}
+          alt="Criar nova receita"
+        />
+        <img
+          onClick={() => navigate('/')}
+          src={house}
+          alt="Página inicial"
+        />
+        <img
+          onClick={() => navigate('/liked')}
+          src={fullHeart}
+          alt="Receitas curtidas"
+        />
+      </Images>
+    </FooterContainer>
   );
 }
 
-const FooterContainer = styled.div`
+const FooterContainer = styled.footer`
   width: 90vw;
   height: 8vh;
-  background-color: #FF6600;
+  background-color: #ff6600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,21 +47,11 @@ const FooterContainer = styled.div`
 
   img {
     width: 5vh;
-  }
-
-  img:hover {
+    cursor: pointer;
   }
 `;
 
-const Line = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: black;
-  position: absolute;
-  top: 0;
-`;
-
-const Images = styled.div`
+const Images = styled.nav`
   width: 100%;
   height: 100%;
   display: flex;

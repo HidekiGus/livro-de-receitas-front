@@ -15,12 +15,13 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/home" element={<SignInPage />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<SignInPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/recipes/new" element={<NewRecipePage />} />
         <Route path="/recipes/:id" element={<RecipePage />} />
         <Route path="/liked" element={<LikedPage />} />
-        <Route path="/recipes/new" element={<NewRecipePage />} />
       </Routes>
     </BrowserRouter>
   );

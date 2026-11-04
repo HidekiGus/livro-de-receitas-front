@@ -1,44 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import frontUrl from '../utils/frontUrl.js';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
 import Footer from './Footer';
 import { TailSpin } from 'react-loader-spinner';
 import Swal from 'sweetalert2';
+import { api, getAuthConfig } from '../services/api';
+
+const LOADING_MESSAGES = [
+  'Preparando receitas pra você',
+  'Receitinhas chegando',
+];
 
 export default function HomePage() {
-  const [text, setText] = useState('');
   const [recipes, setRecipes] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const backUrl = process.env.REACT_APP_BACK_URL;
-  const navigate = useNavigate();
-
-  const frases = ["Preparando receitas pra você", "Receitinhas chegando"];
-  const aleatorio = Math.floor(Math.random() * frases.length);
-  let fala = frases[aleatorio];
+  const loadingMessage = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
+    return LOADING_MESSAGES[randomIndex];
+  }, []);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const token = getToken();
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const promise = await axios.get(`${backUrl}/recipes`, config);
-        setRecipes(promise.data);
-      } catch (error) {
-        setError(error);
+        const response = await api.get('/recipes', getAuthConfig());
+        setRecipes(response.data);
+      } catch (err) {
+        setError(err);
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Failed to fetch recipes!',
+          text: 'Não foi possível carregar as receitas!',
         });
       } finally {
         setLoading(false);
@@ -46,18 +40,13 @@ export default function HomePage() {
     };
 
     fetchRecipes();
-  }, [backUrl]);
-
-  function getToken() {
-    return localStorage.getItem('token');
-  }
-
+  }, []);
 
   return (
     <>
       <Header />
       <RecipesContainer>
-        {recipes === null && error === null ? (
+        {loading ? (
           <WaitingScreen>
             <TailSpin
               height="80"
@@ -65,26 +54,21 @@ export default function HomePage() {
               color="#ff6600"
               ariaLabel="tail-spin-loading"
               radius="1"
-              wrapperStyle={{}}
-              wrapperClass=""
               visible={true}
             />
-            <Loading>{fala}</Loading>
+            <Loading>{loadingMessage}</Loading>
           </WaitingScreen>
         ) : error ? (
-          <h1>Ops! Parece que as receitas não deram certo, atualize a página!</h1>
-        ) : recipes.length === 0 ? (
-          <h1>Ainda não há receitas por aqui!</h1>
+          <StatusMessage>
+            Ops! Parece que as receitas não deram certo, atualize a página!
+          </StatusMessage>
+        ) : !recipes || recipes.length === 0 ? (
+          <StatusMessage>Ainda não há receitas por aqui!</StatusMessage>
         ) : (
-          recipes.map((recipe, index) => (
-            <RecipeCard
-              recipe={recipe}
-              key={index}
-              onClick={() =>
-                window.open(`${frontUrl}/recipes/${recipe._id}`, '_self')
-              }
-            />
-          ))
+          recipes.map((recipe) => {
+            const recipeId = recipe._id || recipe.id;
+            return <RecipeCard recipe={recipe} key={recipeId} />;
+          })
         )}
       </RecipesContainer>
       <Footer />
@@ -92,24 +76,31 @@ export default function HomePage() {
   );
 }
 
-const RecipesContainer = styled.div`
+const RecipesContainer = styled.main`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   flex-direction: row;
-  margin-bottom: 2vh; //8vh from Footer + 2vh for spacing between last post and footer
+  margin-bottom: 10vh;
 
   width: 100vw;
   height: fit-content;
   flex-wrap: wrap;
 `;
 
-const Loading = styled.h1`
+const Loading = styled.p`
   margin-top: 80px;
   font-size: 35px;
   max-width: 80vw;
   text-align: center;
-`
+`;
+
+const StatusMessage = styled.p`
+  margin-top: 20vh;
+  font-size: 30px;
+  max-width: 80vw;
+  text-align: center;
+`;
 
 const WaitingScreen = styled.div`
   display: flex;
@@ -117,4 +108,4 @@ const WaitingScreen = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 25vh;
-`
+`;

@@ -1,21 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 export default function Header() {
+  const navigate = useNavigate();
+
   return (
-    <>
-      <HeaderContainer>
-        <h1>Livro de Receitas</h1>
-      </HeaderContainer>
-    </>
+    <HeaderContainer>
+      <h1 onClick={() => navigate('/')}>Livro de Receitas</h1>
+    </HeaderContainer>
   );
 }
 
-const HeaderContainer = styled.div`
+const HeaderContainer = styled.header`
   width: 100vw;
   height: 10vh;
   min-height: 60px;
-  background: linear-gradient(to right, #FF6600,rgb(250, 69, 49), #FF6600 );
+  background: linear-gradient(to right, #ff6600, rgb(250, 69, 49), #ff6600);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,11 +26,6 @@ const HeaderContainer = styled.div`
     font-family: 'Patrick hand';
     font-size: 50px;
     color: black;
+    cursor: pointer;
   }
-`;
-
-const Line = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: rgba(0, 0, 0, 0.3);
 `;

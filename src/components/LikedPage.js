@@ -1,69 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import styled from 'styled-components';
 import Footer from './Footer';
 import RecipeCard from './RecipeCard';
 import Header from './Header';
 import heartDislike from '../assets/heart-dislike.svg';
-import frontUrl from '../utils/frontUrl.js';
+import { api, getAuthConfig, getToken } from '../services/api';
 
 export default function LikedPage() {
   const [likedRecipes, setLikedRecipes] = useState();
-
-  const backUrl = process.env.REACT_APP_BACK_URL;
-
   const navigate = useNavigate();
 
-  console.log(likedRecipes);
-
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
 
-    if (token === null) {
-      navigate('/');
+    if (!token) {
+      navigate('/login');
+      return;
     }
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const fetchLikes = async () => {
+      try {
+        const res = await api.get('/likes', getAuthConfig());
+        if (Array.isArray(res.data)) {
+          setLikedRecipes(res.data);
+        } else {
+          setLikedRecipes([]);
+        }
+      } catch (_err) {
+        setLikedRecipes([]);
+      }
     };
 
-    const promise = axios.get(`${backUrl}/likes`, config);
-
-    promise
-      .then((res) => {
-        if (res.data === null) {
-          return;
-        } else {
-          setLikedRecipes(res.data);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    fetchLikes();
+  }, [navigate]);
 
   return (
     <>
       <Header />
       <LikedRecipesContainer>
-        {likedRecipes === undefined ? (
-          ''
-        ) : likedRecipes.length === 0 ? (
+        {likedRecipes === undefined ? null : likedRecipes.length === 0 ? (
           <Message>
-            <img src={heartDislike} />
+            <img src={heartDislike} alt="Nenhuma receita curtida" />
             <h1>Você ainda não curtiu nenhuma receita!</h1>
           </Message>
         ) : (
-          likedRecipes.map((recipe, index) => (
-            <RecipeCard
-              recipe={recipe}
-              key={index}
-              onClick={() =>
-                window.open(`${frontUrl}/recipes/${recipe.id}`, '_self')
-              }
-            />
-          ))
+          likedRecipes.map((recipe) => {
+            const recipeId = recipe._id || recipe.id;
+            return <RecipeCard recipe={recipe} key={recipeId} />;
+          })
         )}
       </LikedRecipesContainer>
       <Footer />
@@ -91,12 +76,12 @@ const Message = styled.div`
   }
 `;
 
-const LikedRecipesContainer = styled.div`
+const LikedRecipesContainer = styled.main`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   flex-direction: row;
-  margin-bottom: 10vh; //8vh from Footer + 2vh for spacing between last post and footer
+  margin-bottom: 10vh;
 
   width: 100vw;
   height: fit-content;

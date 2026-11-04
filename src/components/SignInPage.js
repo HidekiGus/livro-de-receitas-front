@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import { api } from '../services/api';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
-  const backUrl = process.env.REACT_APP_BACK_URL;
 
-  function signIn(event) {
+  async function signIn(event) {
     event.preventDefault();
-
     setIsDisabled(true);
 
-    const body = {
-      email,
-      password,
-    };
-
-    const promise = axios.post(`${backUrl}/login`, body);
-
-    promise.then((response) => {
+    try {
+      const response = await api.post('/login', { email, password });
       const token = response.data;
       localStorage.setItem('token', token);
+
       Swal.fire({
         position: 'top',
         icon: 'success',
@@ -33,10 +26,8 @@ export default function SignInPage() {
         showConfirmButton: false,
         timer: 1500,
       });
-      navigate('/home');
-    });
-
-    promise.catch(() => {
+      navigate('/');
+    } catch (_error) {
       setIsDisabled(false);
       Swal.fire({
         position: 'center',
@@ -45,7 +36,7 @@ export default function SignInPage() {
         showConfirmButton: false,
         timer: 1800,
       });
-    });
+    }
   }
 
   return (
@@ -54,7 +45,7 @@ export default function SignInPage() {
       <form onSubmit={signIn}>
         <input
           required
-          type="text"
+          type="email"
           disabled={isDisabled}
           placeholder="Email"
           value={email}
@@ -68,7 +59,7 @@ export default function SignInPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit" id="data-login">
+        <button type="submit" id="data-login" disabled={isDisabled}>
           Login
         </button>
       </form>
@@ -81,7 +72,7 @@ export default function SignInPage() {
   );
 }
 
-const Container = styled.div`
+const Container = styled.main`
   height: 100vh;
   width: 100vw;
   background-color: #0ea960;
@@ -143,6 +134,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     @media (min-width: 600px) {
       width: 500px;
@@ -152,7 +144,7 @@ const Container = styled.div`
   }
 `;
 
-const SignUp = styled.div`
+const SignUp = styled.p`
   font-family: 'Patrick Hand';
   font-weight: 400;
   font-size: 22px;

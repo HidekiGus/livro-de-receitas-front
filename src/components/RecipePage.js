@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 
@@ -11,32 +10,26 @@ import link from '../assets/link-outline.svg';
 import Header from './Header';
 import Footer from './Footer';
 
-import frontUrl from '../utils/frontUrl.js';
+import frontUrl from '../utils/frontUrl';
+import { api, getAuthConfig, getToken } from '../services/api';
 
 export default function RecipePage() {
   const [loading, setLoading] = useState(true);
-  const [isLiked, setIsLiked] = useState();
+  const [isLiked, setIsLiked] = useState(false);
   const [recipeData, setRecipeData] = useState({});
-  const backUrl = process.env.REACT_APP_BACK_URL;
-  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
     const fetchRecipeData = async () => {
       try {
-        const token = getToken();
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const res = await axios.get(`${backUrl}/recipes/${id}`, config);
-        setRecipeDataFromRes(res);
-      } catch (error) {
+        const res = await api.get(`/recipes/${id}`, getAuthConfig());
+        setIsLiked(Boolean(res.data?.isLiked));
+        setRecipeData(res.data || {});
+      } catch (_error) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Failed to fetch recipe data!',
+          text: 'Não foi possível carregar os dados da receita!',
         });
       } finally {
         setLoading(false);
@@ -46,37 +39,35 @@ export default function RecipePage() {
     fetchRecipeData();
   }, [id]);
 
-  function getToken() {
-    return localStorage.getItem('token');
-  }
-
-  function setRecipeDataFromRes(res) {
-    setIsLiked(res.data.isLiked);
-    setRecipeData(res.data);
-  }
+  const recipeId = recipeData._id || recipeData.id || id;
 
   async function like(e) {
     e.preventDefault();
     try {
-      const token = getToken();
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const res = await axios.post(`${backUrl}/like/${recipeData.id}`, {}, config);
-      setIsLiked(res.data);
-    } catch (error) {
+      const res = await api.post(`/like/${recipeId}`, {}, getAuthConfig());
+      setIsLiked(Boolean(res.data));
+    } catch (_error) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Failed to like the recipe!',
+        text: 'Não foi possível curtir a receita!',
       });
     }
   }
 
+  function copyLink() {
+    navigator.clipboard.writeText(`${frontUrl}/recipes/${recipeId}`);
+    Swal.fire({
+      position: 'top',
+      icon: 'success',
+      title: 'Link copiado pra área de transferência!',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Carregando...</div>;
   }
 
   return (
@@ -84,7 +75,7 @@ export default function RecipePage() {
       <Header />
       <Container>
         <RecipeContainer>
-          <AboveLine onClick={() => navigate(`/recipes/${recipeData._id}`)}>
+          <AboveLine>
             <Top>
               <img src={recipeData.image} alt={recipeData.title} />
             </Top>
@@ -92,27 +83,29 @@ export default function RecipePage() {
               <h1>{recipeData.title}</h1>
             </TopMiddle>
             <TopBottom>
-              <h1>⏲️ {recipeData.time} minutos</h1>
-              <h1>Rende: {recipeData.portions} porções</h1>
+              <p>⏲️ {recipeData.time} minutos</p>
+              <p>Rende: {recipeData.portions} porções</p>
             </TopBottom>
             <BottomMiddle>
-              <h1>🛒 Ingredientes</h1>
-              {recipeData.ingredients === undefined ? (
-                ''
-              ) : (
+              <h2>🛒 Ingredientes</h2>
+              {Array.isArray(recipeData.ingredients) && (
                 <ul>
                   {recipeData.ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient}</li>
+                    <li key={`${ingredient}-${index}`}>
+                      {typeof ingredient === 'object'
+                        ? ingredient.description
+                        : ingredient}
+                    </li>
                   ))}
                 </ul>
               )}
-              <h1>🥣 Modo de preparo</h1>
-              {recipeData.method === undefined ? (
-                ''
-              ) : (
+              <h2>🥣 Modo de preparo</h2>
+              {Array.isArray(recipeData.method) && (
                 <ol>
-                  {recipeData.method.map((method, index) => (
-                    <li key={index}>{method}</li>
+                  {recipeData.method.map((step, index) => (
+                    <li key={`${step}-${index}`}>
+                      {typeof step === 'object' ? step.description : step}
+                    </li>
                   ))}
                 </ol>
               )}
@@ -120,29 +113,18 @@ export default function RecipePage() {
           </AboveLine>
           <Line />
           <Bottom>
-            {getToken() === null ? (
-              ''
-            ) : isLiked ? (
-              <img src={fullHeart} onClick={like} alt="Liked" />
-            ) : (
-              <img src={emptyHeart} color="red" onClick={like} alt="Not Liked" />
+            {getToken() !== null && (
+              <img
+                src={isLiked ? fullHeart : emptyHeart}
+                onClick={like}
+                alt={isLiked ? 'Receita curtida' : 'Curtir receita'}
+              />
             )}
 
             <img
               src={link}
-              onClick={() => {
-                Swal.fire({
-                  position: 'top',
-                  icon: 'success',
-                  title: 'Link copiado pra área de transferência!',
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-                navigator.clipboard.writeText(
-                  `${frontUrl}/recipes/${recipeData.id}`
-                );
-              }}
-              alt="Copy Link"
+              onClick={copyLink}
+              alt="Copiar link da receita"
             />
           </Bottom>
         </RecipeContainer>
@@ -152,16 +134,16 @@ export default function RecipePage() {
   );
 }
 
-const Container = styled.div`
+const Container = styled.main`
   width: 100vw;
   height: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10vh; //8vh from Footer + 2vh for spacing between last post and footer
+  margin-bottom: 10vh;
 `;
 
-const RecipeContainer = styled.div`
+const RecipeContainer = styled.article`
   font-family: 'Patrick hand';
   width: 90vw;
   height: fit-content;
@@ -187,13 +169,6 @@ const Top = styled.div`
     border: 1px solid black;
     border-radius: 8px;
   }
-
-  /* @media (min-width: 600px) {
-    img {
-      height: 120px;
-      width: 200px;
-    }
-  } */
 `;
 
 const TopMiddle = styled.div`
@@ -203,7 +178,7 @@ const TopMiddle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   h1 {
     font-size: 40px;
     font-weight: bold;
@@ -219,7 +194,7 @@ const TopMiddle = styled.div`
       font-size: 30px;
     }
   }
-`
+`;
 
 const TopBottom = styled.div`
   width: 90vw;
@@ -231,7 +206,7 @@ const TopBottom = styled.div`
 
   padding: 10px 0;
 
-  h1 {
+  p {
     font-size: 24px;
     font-weight: bold;
   }
@@ -247,7 +222,7 @@ const BottomMiddle = styled.div`
 
   padding-left: 20px;
 
-  h1 {
+  h2 {
     font-size: 40px;
     padding: 15px 0 15px 10px;
   }
@@ -270,7 +245,7 @@ const BottomMiddle = styled.div`
   }
 
   @media (min-width: 600px) {
-    h1 {
+    h2 {
       padding-bottom: 40px;
     }
 
@@ -298,6 +273,7 @@ const Bottom = styled.div`
 
   img {
     height: 30px;
+    cursor: pointer;
   }
 `;
 
