@@ -91,6 +91,7 @@ const RecipeContainer = styled.div`
 `;
 
 const Top = styled.div`
+  position: relative;
   width: 90vw;
   height: 150px;
   max-width: 480px;
@@ -99,10 +100,14 @@ const Top = styled.div`
   align-items: center;
 
   img {
+    position: relative;
+    top: -16px;
+    left: 0;
     height: 117px;
     width: 100%;
     max-width: 208px;
-    border-radius: 10px;
+    border: 1px solid #ff6600;
+    border-radius: 24px;
     margin-right: 20px;
     margin-left: 20px;
     box-shadow: 1px 1px 3px 1px ${boxShadowColor};
