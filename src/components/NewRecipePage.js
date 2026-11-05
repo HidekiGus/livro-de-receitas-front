@@ -10,7 +10,8 @@ export default function NewRecipePage() {
   const [recipeTitle, setRecipeTitle] = useState('');
   const [recipeTime, setRecipeTime] = useState('');
   const [recipePortions, setRecipePortions] = useState('');
-  const [recipeImage, setRecipeImage] = useState('');
+  // const [recipeImage, setRecipeImage] = useState('');
+  const [recipeImageFile, setRecipeImageFile] = useState(null);
   const [recipeIngredients, setRecipeIngredients] = useState('');
   const [recipeMethod, setRecipeMethod] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
@@ -50,6 +51,11 @@ export default function NewRecipePage() {
 
       setIsDisabled(true);
       try {
+        if (!recipeImageFile) {
+          throw new Error('Selecione um arquivo de imagem para a receita.');
+        }
+
+        /*
         await api.post(
           '/recipes',
           {
@@ -62,6 +68,17 @@ export default function NewRecipePage() {
           },
           getAuthConfig()
         );
+        */
+
+        const formData = new FormData();
+        formData.append('title', recipeTitle);
+        formData.append('image', recipeImageFile);
+        formData.append('portions', String(Number(recipePortions)));
+        formData.append('time', String(Number(recipeTime)));
+        formData.append('ingredients', recipeIngredients);
+        formData.append('method', recipeMethod);
+
+        await api.post('/recipes', formData, getAuthConfig());
 
         Swal.fire({
           position: 'center',
@@ -136,7 +153,8 @@ export default function NewRecipePage() {
 
         <FieldContainer>
           <label htmlFor="recipe-image">🖼️ Foto</label>
-          <p>Escolha uma foto do melhor ângulo da sua receita!</p>
+          <p>Escolha uma foto da sua receita (será ajustada automaticamente para 720x480)!</p>
+          {/*
           <Input
             id="recipe-image"
             required
@@ -145,6 +163,19 @@ export default function NewRecipePage() {
             placeholder="Coloque o link da foto"
             value={recipeImage}
             onChange={(e) => setRecipeImage(e.target.value)}
+          />
+          */}
+          <FileInput
+            id="recipe-image"
+            required
+            type="file"
+            accept="image/*"
+            disabled={isDisabled}
+            onChange={(e) =>
+              setRecipeImageFile(
+                e.target.files && e.target.files[0] ? e.target.files[0] : null
+              )
+            }
           />
         </FieldContainer>
 
@@ -247,6 +278,20 @@ const Input = styled.input`
   ::placeholder {
     color: gray;
   }
+
+  @media (min-width: 600px) {
+    width: 500px;
+  }
+`;
+
+const FileInput = styled.input`
+  width: 90vw;
+  padding: 6px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 0px 2px 4px gray;
+  cursor: pointer;
 
   @media (min-width: 600px) {
     width: 500px;
